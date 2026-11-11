@@ -313,8 +313,10 @@ function ProjectPanel({
 }
 
 export function ProjectDetails({ project: p, headingLevel: H, headingId }: { project: Project; headingLevel: 'h3' | 'h4'; headingId?: string }) {
+  // Sans rôle ni « appris » : la colonne de droite resterait vide, le bloc principal prend toute la largeur
+  const solo = !isFilled(p.role) && !isFilled(p.learned);
   return (
-    <div className="project">
+    <div className={`project${solo ? ' project--solo' : ''}`}>
       {isFilled(p.image) && (
         <img className="project__image" src={asset(p.image as string)} alt={`Capture d'écran : ${p.name}`} width={800} height={500} loading="lazy" />
       )}
@@ -344,7 +346,7 @@ export function ProjectDetails({ project: p, headingLevel: H, headingId }: { pro
         {isFilled(p.note) && <p className="project__note">{p.note}</p>}
         <ProjectLinks project={p} />
       </div>
-      {(isFilled(p.role) || isFilled(p.learned)) && (
+      {!solo && (
         <div className="project__side">
           {isFilled(p.role) && (
             <div className="project__block">
